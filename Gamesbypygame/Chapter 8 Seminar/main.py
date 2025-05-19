@@ -10,10 +10,12 @@ def NextQuestion(a):
     global text_num, question_num, cur_team_num, question_list, question
     a = a
     text_num = 0
-    if len(question_list) != 0:
-        question = question_list.pop()
+
+    if len(question_list) == 0:
+        ChangeGameState("InteractiveEnd")
+        
     else:
-        GameState == "InteractiveEnd"
+        question = question_list.pop()
     if cur_team_num == 0:
         cur_team_num = 1
     else: 
@@ -84,24 +86,17 @@ GameState = "TitleScreen"
 
 runVar = True
 
-while runVar:
-    current_time = pygame.time.get_ticks()
+#------------------------WIDGETS---------------------
 
-
-    match GameState:
-        case "TitleScreen":
-            screen.fill(WHITE)
-            
-            titleText = TextClass(
-                "Chapter 8 Seminar",
+titleText = TextClass(
+                "Interactive Activity",
                 pygame.font.Font(FONT, 100),
                 BLACK,
                 (950, 100),
                 screen
             )
-            titleText.blit()
-            
-            startButton = ButtonClass(
+
+startButton = ButtonClass(
                 TextClass(
                     "Start",
                     pygame.font.Font(FONT, 40),
@@ -116,47 +111,122 @@ while runVar:
                 ChangeGameState,
                 "TeamDescribe"
             )
-            buttonlist.append(startButton)
-            startButton.draw()
 
-            creditsText = TextClass(
+creditsText = TextClass(
                 "Credit to Dilan for idea",
                 pygame.font.Font(FONT, 40),
                 BLACK,
                 (950, 550),
                 screen
             )
-            creditsText.blit()
 
-        case "TeamDescribe":
-            buttonlist = []
-            screen.fill(WHITE)
-
-            matchText = TextClass(
+matchText = TextClass(
                 "Teams",
                 pygame.font.Font(FONT, 100),
                 BLACK,
                 (950, 100),
                 screen
             )
-            matchText.blit()
 
-            team1Text = TextClass(
+team1Text = TextClass(
                 "Team Jason",
                 pygame.font.Font(FONT, 60),
                 BLACK,
                 (400, 150),
                 screen
             )
-            team1Text.blit()
 
-            team2Text = TextClass(
+team2Text = TextClass(
                 "Team Vivaan",
                 pygame.font.Font(FONT, 60),
                 BLACK,
                 (1400, 150),
                 screen
             )
+
+continueButton = ButtonClass(
+                TextClass(
+                    "Continue",
+                    pygame.font.Font(FONT, 40),
+                    BLACK,
+                    (950, 550),
+                    screen
+                ),
+                pygame.Rect(950 - 125, 550 - 50, 250, 100),
+                0,
+                GREEN,
+                screen,
+                ChangeGameState,
+                "Levels"
+            )
+
+correctButton = ButtonClass(
+                TextClass(
+                    "CORRECT",
+                    pygame.font.Font(POPPINS, 40),
+                    GREEN,
+                    (400, 550),
+                    screen
+                ),
+                pygame.Rect(400 - 125, 550 - 50, 250, 100),
+                0,
+                WHITE,
+                screen,
+                NextQuestion,
+                None
+            )
+
+wrongButton = ButtonClass(
+                TextClass(
+                    "INCORRECT",
+                    pygame.font.Font(POPPINS, 40),
+                    RED,
+                    (1400, 550),
+                    screen
+                ),
+                pygame.Rect(1400 - 125, 550 - 50, 250, 100),
+                0,
+                WHITE,
+                screen,
+                NextQuestion,
+                None
+            )
+
+thanksText = TextClass(
+                "End Of Our Interactive",
+                pygame.font.Font(FONT, 100),
+                BLACK,
+                (950, 100),
+                screen
+            )
+
+while runVar:
+    current_time = pygame.time.get_ticks()
+
+
+    match GameState:
+        case "TitleScreen":
+            screen.fill(WHITE)
+
+            buttonlist = []
+            
+            
+            titleText.blit()
+            
+            buttonlist.append(startButton)
+            startButton.draw()
+
+            creditsText.blit()
+
+        case "TeamDescribe":
+            buttonlist = []
+            screen.fill(WHITE)
+
+            
+            matchText.blit()
+            
+            team1Text.blit()
+
             team2Text.blit()
 
             for x in range(len(team1)):
@@ -183,21 +253,7 @@ while runVar:
                 )
                 memberText.blit()
 
-            continueButton = ButtonClass(
-                TextClass(
-                    "Continue",
-                    pygame.font.Font(FONT, 40),
-                    BLACK,
-                    (950, 550),
-                    screen
-                ),
-                pygame.Rect(950 - 125, 550 - 50, 250, 100),
-                0,
-                GREEN,
-                screen,
-                ChangeGameState,
-                "Levels"
-            )
+            
             buttonlist.append(continueButton)
             continueButton.draw()
 
@@ -233,50 +289,22 @@ while runVar:
                 if text_num != len(list(question)):
                     text_num += 1
 
-            correctButton = ButtonClass(
-                TextClass(
-                    "CORRECT",
-                    pygame.font.Font(POPPINS, 40),
-                    GREEN,
-                    (400, 550),
-                    screen
-                ),
-                pygame.Rect(400 - 125, 550 - 50, 250, 100),
-                0,
-                WHITE,
-                screen,
-                NextQuestion,
-                None
-            )
+            
             buttonlist.append(correctButton)
             correctButton.draw()
 
-            wrongButton = ButtonClass(
-                TextClass(
-                    "INCORRECT",
-                    pygame.font.Font(POPPINS, 40),
-                    RED,
-                    (1400, 550),
-                    screen
-                ),
-                pygame.Rect(1400 - 125, 550 - 50, 250, 100),
-                0,
-                WHITE,
-                screen,
-                NextQuestion,
-                None
-            )
+            
             buttonlist.append(wrongButton)
             wrongButton.draw()
 
         case "InteractiveEnd":
             screen.fill(WHITE)
 
+            buttonlist = []
 
+            thanksText.blit()
 
             
-            
-
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
