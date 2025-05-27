@@ -1,50 +1,85 @@
 import pygame
 from UIclasses import TextClass, ButtonClass
 
-def ChangeGameState(GameStateChange):
-    global GameState, buttonlist
-    GameState = GameStateChange
-    buttonlist = []
-
-def NextQuestion(a):
-    global text_num, question_num, cur_team_num, question_list, question
-    a = a
-    text_num = 0
-
-    if len(question_list) == 0:
-        ChangeGameState("InteractiveEnd")
-        
-    else:
-        question = question_list.pop()
-    if cur_team_num == 0:
-        cur_team_num = 1
-    else: 
-        cur_team_num = 0
-    
-
 
 
 WHITE = (255, 255 ,255)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-FONT = "Fontsforpygame\Freedom-10eM.ttf"
-POPPINS = "Fontsforpygame/poppins.regular.ttf"
+FONT = "Fonts\Freedom-10eM.ttf"
+POPPINS = "Fonts/Poppins-Black.ttf"
+
+
+def ChangeGameState(GameStateChange):
+    global GameState, buttonlist
+    GameState = GameStateChange
+    buttonlist = []
+
+def NextQuestion(correct):
+    global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list, answer, questiontuple, win_team, team_names
+    print(cur_score)
+    if correct:
+        scores_list[cur_score] += 1
+    else:
+        scores_list[cur_score-1] += 1 
+    text_num = 0
+
+    if len(question_list) == 0:
+        if scores_list[0] > scores_list[1]:
+            win_team = team_names[0]
+        elif scores_list[1] > scores_list[0]:
+            win_team = team_names[1]
+        ChangeGameState("InteractiveEnd")
+        
+    else:
+        questiontuple = question_list.pop()
+        question = questiontuple[0]
+        answer = questiontuple[1]
+    if cur_team_num == 0:
+        cur_team_num = 1
+    else: 
+        cur_team_num = 0
+
+    cur_score = (cur_score + 1) % 2
+
+
+def GuessedTrue(a):
+    global answer
+    print(answer)
+    if answer == True:
+        NextQuestion(True)
+    else:
+        NextQuestion(False)
+
+def GuessedFalse(a):
+    global answer
+    print(answer)
+    if answer == False:
+        NextQuestion(True)
+    else:
+        NextQuestion(False)
 
 
 end_time_question_increase = 10
 
+win_team = "No One"
 cur_team_num = 0
 question_num = 0
 text_num = 1
 cur_team_text = "Team Jason's Turn"
+scores_list = [0, 0]
+cur_score = 0
 
 question_list = [
-    "Question question question question question question questoin eusiotnsetoi sentosein",
-    "Question question question questiQuestion question question questiQuestion question question questi"
+    ("Question question question question question question questoin eusiotnsetoi sentosein", True),
+    ("Question question question questiQuestion question question questiQuestion question question questi", False)
 ]
 
-question = question_list.pop()
+questiontuple = question_list.pop()
+question = questiontuple[0]
+answer = questiontuple[1]
+
 team_names = ["Team Jason", "Team Vivaan"]
 buttonlist = []
 team1 = [
@@ -77,9 +112,10 @@ team2 = [
     "AJ"
 ]
 
+
 pygame.init()
 
-pygame.display.set_caption("Animal Journey")
+pygame.display.set_caption("Chapter 8 Seminar")
 screen = pygame.display.set_mode((1900, 900))
 
 GameState = "TitleScreen"
@@ -162,7 +198,7 @@ continueButton = ButtonClass(
 
 correctButton = ButtonClass(
                 TextClass(
-                    "CORRECT",
+                    "TRUE",
                     pygame.font.Font(POPPINS, 40),
                     GREEN,
                     (400, 550),
@@ -172,13 +208,13 @@ correctButton = ButtonClass(
                 0,
                 WHITE,
                 screen,
-                NextQuestion,
-                None
+                GuessedTrue,
+                True
             )
 
 wrongButton = ButtonClass(
                 TextClass(
-                    "INCORRECT",
+                    "FALSE",
                     pygame.font.Font(POPPINS, 40),
                     RED,
                     (1400, 550),
@@ -188,8 +224,8 @@ wrongButton = ButtonClass(
                 0,
                 WHITE,
                 screen,
-                NextQuestion,
-                None
+                GuessedFalse,
+                False
             )
 
 thanksText = TextClass(
@@ -199,6 +235,7 @@ thanksText = TextClass(
                 (950, 100),
                 screen
             )
+
 
 while runVar:
     current_time = pygame.time.get_ticks()
@@ -284,6 +321,23 @@ while runVar:
             )
             questionText.blit()
 
+            score1Text = TextClass(
+                f"{team_names[0]}'s Score: {scores_list[0]}",
+                pygame.font.Font(POPPINS, 20),
+                BLACK,
+                (200, 50),
+                screen
+            )
+            score1Text.blit()
+            score2Text = TextClass(
+                f"{team_names[1]}'s Score: {scores_list[1]}",
+                pygame.font.Font(POPPINS, 20),
+                BLACK,
+                (1700, 50),
+                screen
+            )
+            score2Text.blit()
+
 
             if current_time > end_time_question_increase:
                 if text_num != len(list(question)):
@@ -303,6 +357,50 @@ while runVar:
             buttonlist = []
 
             thanksText.blit()
+
+            team1Text = TextClass(
+                "Team Jason",
+                pygame.font.Font(FONT, 60),
+                BLACK,
+                (400, 250),
+                screen
+            )
+
+            team2Text = TextClass(
+                "Team Vivaan",
+                pygame.font.Font(FONT, 60),
+                BLACK,
+                (1400, 250),
+                screen
+            )
+            team1Text.blit()
+            team2Text.blit()
+
+            score1Text = TextClass(
+                f"{scores_list[0]}",
+                pygame.font.Font(POPPINS, 50),
+                BLACK,
+                (400, 320),
+                screen
+            )
+            score1Text.blit()
+            score2Text = TextClass(
+                f"{scores_list[1]}",
+                pygame.font.Font(POPPINS, 50),
+                BLACK,
+                (1400, 320),
+                screen
+            )
+            score2Text.blit()
+
+            winText = TextClass(
+                f"{win_team} Won !",
+                pygame.font.Font(POPPINS, 50),
+                BLACK,
+                (950, 500),
+                screen
+            )
+            winText.blit()
 
             
     
