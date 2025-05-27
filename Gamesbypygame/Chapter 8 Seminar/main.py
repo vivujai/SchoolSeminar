@@ -18,7 +18,8 @@ def ChangeGameState(GameStateChange):
 
 
 def NextQuestion(correct):
-    global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list, answer, questiontuple, win_team, team_names
+    global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list
+    global answer, questiontuple, win_team, team_names, cur_player, cur_name, players_list
     print(cur_score)
     if correct:
         scores_list[cur_score] += 1
@@ -43,6 +44,8 @@ def NextQuestion(correct):
         cur_team_num = 0
 
     cur_score = (cur_score + 1) % 2
+    cur_player += 1
+    cur_name = players_list[cur_player]
 
 
 def GuessedTrue(a):
@@ -72,6 +75,10 @@ text_num = 1
 cur_team_text = "Team Jason's Turn"
 scores_list = [0, 0]
 cur_score = 0
+cur_player = 0
+players_list =[]
+
+
 
 question_list = [
     ("Question question question question question question questoin eusiotnsetoi sentosein", True),
@@ -111,9 +118,19 @@ team2 = [
     "Jake",
     "Kate",
     "Dilyaa",
-    "AJ"
 ]
 
+for x in range(len(team1)):
+    try:
+        team1person = team1[x]
+        team2person = team2[x]
+        players_list.append(team1person)
+        players_list.append(team2person)
+    except IndexError:
+        team1person = team1[x]
+        players_list.append(team1person)
+
+cur_name = players_list[cur_player]
 
 pygame.init()
 
@@ -299,6 +316,15 @@ while runVar:
         case "Levels":
             screen.fill(WHITE)
             buttonlist = []
+
+            playerText = TextClass(
+                f"{cur_name}",
+                pygame.font.Font(FONT, 30),
+                BLACK,
+                (950, 200),
+                screen
+            )
+            playerText.blit()
 
             cur_team_text = team_names[cur_team_num]
 
