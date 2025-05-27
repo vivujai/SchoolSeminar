@@ -16,6 +16,7 @@ def ChangeGameState(GameStateChange):
     GameState = GameStateChange
     buttonlist = []
 
+
 def NextQuestion(correct):
     global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list, answer, questiontuple, win_team, team_names
     print(cur_score)
@@ -51,6 +52,7 @@ def GuessedTrue(a):
         NextQuestion(True)
     else:
         NextQuestion(False)
+
 
 def GuessedFalse(a):
     global answer
