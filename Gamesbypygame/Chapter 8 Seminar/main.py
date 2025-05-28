@@ -18,12 +18,31 @@ def ChangeGameState(GameStateChange):
 
 
 def NextQuestion(correct):
-    global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list
-    global answer, questiontuple, win_team, team_names, cur_player, cur_name, players_list
+    global text_num, question_num, cur_team_num, question_list, question, cur_score, scores_list, questionText
+    global answer, questiontuple, win_team, team_names, cur_player, cur_name, players_list, end_time_color_change, blit_black
     print(cur_score)
     if correct:
         scores_list[cur_score] += 1
+        questionText = TextClass(
+                f"{question_text}",
+                pygame.font.Font(POPPINS, 24),
+                GREEN,
+                (950, 400),
+                screen
+            )
+        blit_black = False
+        questionText.blit()
     else:
+        questionText = TextClass(
+                f"{question_text}",
+                pygame.font.Font(POPPINS, 24),
+                RED,
+                (950, 400),
+                screen
+            )
+        blit_black = False
+        end_time_color_change = current_time + 3000
+        questionText.blit()
         scores_list[cur_score-1] += 1 
     text_num = 0
 
@@ -72,12 +91,12 @@ win_team = "No One"
 cur_team_num = 0
 question_num = 0
 text_num = 1
-cur_team_text = "Team Jason's Turn"
+cur_team_text = "Team Vivaan's Turn"
 scores_list = [0, 0]
 cur_score = 0
 cur_player = 0
 players_list =[]
-
+blit_black = True
 
 
 question_list = [
@@ -89,12 +108,12 @@ questiontuple = question_list.pop()
 question = questiontuple[0]
 answer = questiontuple[1]
 
-team_names = ["Team Jason", "Team Vivaan"]
+team_names = ["Team Vivaan", "Team Jason"]
 buttonlist = []
 team1 = [
     "Krishan",
     "Alvin",
-    "Cameron",
+    "Dilyaa",
     "Josh",
     "Ethan",
     "Max",
@@ -117,7 +136,7 @@ team2 = [
     "Ella",
     "Jake",
     "Kate",
-    "Dilyaa",
+    "Cameron",
 ]
 
 for x in range(len(team1)):
@@ -140,6 +159,8 @@ screen = pygame.display.set_mode((1900, 900))
 GameState = "TitleScreen"
 
 runVar = True
+
+end_time_color_change = 3000
 
 #------------------------WIDGETS---------------------
 
@@ -184,7 +205,7 @@ matchText = TextClass(
             )
 
 team1Text = TextClass(
-                "Team Jason",
+                f"{team_names[0]}",
                 pygame.font.Font(FONT, 60),
                 BLACK,
                 (400, 150),
@@ -192,7 +213,7 @@ team1Text = TextClass(
             )
 
 team2Text = TextClass(
-                "Team Vivaan",
+                f"{team_names[1]}",
                 pygame.font.Font(FONT, 60),
                 BLACK,
                 (1400, 150),
@@ -340,13 +361,14 @@ while runVar:
 
             question_text = question
 
-            questionText = TextClass(
-                f"{question_text}",
-                pygame.font.Font(POPPINS, 24),
-                BLACK,
-                (950, 400),
-                screen
-            )
+            if blit_black:
+                questionText = TextClass(
+                    f"{question_text}",
+                    pygame.font.Font(POPPINS, 24),
+                    BLACK,
+                    (950, 400),
+                    screen
+                )
             questionText.blit()
 
             score1Text = TextClass(
@@ -440,6 +462,11 @@ while runVar:
             for button in buttonlist:
                 if button.btnRect.collidepoint(mouse_pos):
                         button.command(button.param)
+                        print(button.command)
+                        if button.command == GuessedFalse or button.command == GuessedTrue:
+                            pygame.display.update()
+                            pygame.time.wait(3000)
+                            blit_black = True
                         
 
     
