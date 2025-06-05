@@ -100,8 +100,29 @@ blit_black = True
 
 
 question_list = [
-    ("Question question question question question question questoin eusiotnsetoi sentosein", True),
-    ("Question question question questiQuestion question question questiQuestion question question questi", False)
+    ("Copper is a mineral", True),
+    ("Fossil fuels can be formed from plant waste", True),
+    ("Minerals usually take less than 100 years to form", False),
+    ("Running out of minerals is a big problem the world faces", False),
+    ("Crude oil is the most abundant fossil fuel", False),
+    ("Natural gas is a fossil fuel", True),
+    ("Fracking can be used to extract coal", False),
+    ("There are three types of fossil fuels", True),
+    ("Burning fossil fuels can release carbon dioxide", True),
+    ("Ores are a fossil fuel", False),
+    ("Ore deposits only consist of one type of ore", False),
+    ("Ores usually do not have to be refined and can be utilised before being refined", False),
+    ("Mining companies need permission from the government to mine an area", True),
+    ("Government permission to mine an area gives you complete power over the area", False),
+    ("Crushing an ore can refine it", True),
+    ("Fossil fuels running out is a problem in the next couple centuries", True),
+    ("Minerals running out is a problem in the next couple centuries", False),
+    ("Indigenous people are in trouble due to extracting of resources", True),
+    ("Some profits from extracting minerals are shared with indigenous people", True),
+    ("The Deepwater Horizon Oil SPill happened in 2009", False),
+    ("Over 4.9 million barrels were spilt in the Deepwater Horizon Oil Spill", True),
+    ("The Deepwater Horizon Oil Spill was one of the worst in history", True),
+    ("The Deepwater Horizon Oil Spill happened in the Gulf of Mexico", True)
 ]
 
 questiontuple = question_list.pop()
